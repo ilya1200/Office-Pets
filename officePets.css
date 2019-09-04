@@ -1,0 +1,37 @@
+h1 {
+    text-align: center;
+}
+h5,h3{
+    font-family: Arial, Helvetica, sans-serif;
+}
+#main{
+    width:500px;
+    height:500px;
+    border-style: solid 1px black;
+}
+#details{
+    width: 300px;
+    height: 300px;
+    margin-left: 25%;
+    border: 1px black solid;
+    background-color:#dfe4ea; 
+}
+#image{
+    width:120px;
+    height: 120px;
+    border: 1px black solid;
+    margin-left:90px;
+    margin-top: 20px;
+}
+#name{
+    height:100px;
+    display: inline-block;
+    margin-left:20%;
+}
+#status{
+    margin-left: 70%;
+    margin-bottom: 50px;
+}
+img{
+    margin-left:10px;
+}
