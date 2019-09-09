@@ -1,19 +1,19 @@
-
-
 const main = document.getElementById("main");
 const list = document.getElementById("list");
+const welcome = document.getElementById("welcome");
 const button = document.getElementById("add-item");
 
+const enmStatus = {
+    ALL: 'all',
+    IN: 'in',
+    OUT: 'out'
+}
+
 class App {
-    constructor() { // set the app
-        this.app = document.getElementById("app");
-        this.welcome = document.getElementById("welcome");
-        this.main = document.getElementById("main");
-        this.showMode = "all";
-    }
+    constructor() { } // set the app
 
     init() {
-        setTimeout(() => { this.loadData() }, 3000);
+        setTimeout(() => { this.loadData() }, 1000);
         //ToDo 
 
         //2. Create a dammyDB 
@@ -24,29 +24,38 @@ class App {
     }
 
     loadData() {
-        console.log("Data loaded");
         this.redirect();
     }
 
     redirect() {
-        this.welcome.style.display = "none";
-        this.main.style.display = "block";
+        welcome.style.display = "none";
+        main.style.display = "block";
     }
 }
 
 class ListManager {
     constructor(list) {
         this.list = list;
+        this.showMode = enmStatus.ALL;
+    }
+
+    setShowMode(showMode) {
+        this.showMode = showMode;
+        this.shiftShowMode(showMode);
     }
 
     toggleItemState(listItem) {
-        if (listItem.classList.contains('in')) {
-            listItem.classList.remove('in');
-            listItem.classList.add('out');
+        const statusIN = enmStatus.IN;
+        const statusOUT = enmStatus.OUT;
+
+        if (listItem.classList.contains(statusIN)) {
+            listItem.classList.remove(statusIN);
+            listItem.classList.add(statusOUT);
         } else {
-            listItem.classList.remove('out');
-            listItem.classList.add('in');
+            listItem.classList.remove(statusOUT);
+            listItem.classList.add(statusIN);
         }
+        this.shiftShowMode(this.showMode);
     }
 
     shiftShowMode(showMode) {
@@ -54,7 +63,7 @@ class ListManager {
         let itemsRemainedInShowMode = list.children.length;
 
         for (let listItem of list.children) {
-            if (showMode === "all") {
+            if (showMode === enmStatus.ALL) {
                 listItem.style.display = "block";
             } else {
                 const display = listItem.classList.contains(showMode) ? "block" : "none";
@@ -87,13 +96,9 @@ class ListManager {
         errorMsg.innerHTML = "";
     }
 
-    generateListItem(itemStatus = "out",src, alt,itemName = "unknown" ){
-        if(!src || !alt){
-            return;
-        }
-
-        const listItem = 
-        `                
+    generateListItem(itemName = "unknown", src, alt, itemStatus = enmStatus.OUT) {
+        const listItem =
+            `                
             <li class="list-item ${itemStatus}">
                 <img class="item-img"
                     src=${src}
@@ -109,7 +114,7 @@ class ListManager {
 }
 
 
-const listManager = new ListManager(list);
+
 
 /**
  *  This Toggles a list-items state, on a list-item click.
@@ -125,8 +130,6 @@ list.addEventListener("click", (event) => {
     if (listItem.classList.contains('list-item')) {
         listManager.toggleItemState(listItem);
     }
-
-    //ToDo: Issue status change
 });
 
 
@@ -140,28 +143,38 @@ main.addEventListener("click", (event) => {
         return;
     }
 
-    const showMode = target.id;
-    listManager.shiftShowMode(showMode);
+    listManager.setShowMode(enmStatus[target.id.toUpperCase()]);
 })
 
 button.addEventListener("click", () => {
+    const newItem = {};
+
+    // GET INPUT
     const name = prompt("Add a Pet name: ");
     const url = prompt("Add a Pet url: ");
     let status = prompt("Add status: (in/out - dafault)");
 
+    // Validate INPUT
     if (!name || !url) {
         listManager.issueListError(`Cannot add ,check url/name`);
         return;
     }
 
-    if(!status || status!="in"){
-        status="out";
+    if (!status || status != enmStatus.IN) {
+        status = enmStatus.OUT;
     }
 
-    listManager.generateListItem(status,url,name,name);
-    console.log(`${name} added`);
+    // Set new Item
+    newItem.name = name;
+    newItem.imageURL = url;
+    newItem.status = status;
+
+    // Add new Item to DB
+
+    //Update UI
+    listManager.generateListItem(name, url, name, status);
 })
 
-
+const listManager = new ListManager(list);
 const app = new App();
 app.init();
