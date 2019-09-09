@@ -13,7 +13,7 @@ class App {
     constructor() { } // set the app
 
     init() {
-        setTimeout(() => { this.loadData() }, 1000);
+        setTimeout(() => { this.loadData() }, 2500);
         //ToDo 
 
         //2. Create a dammyDB 
@@ -34,13 +34,17 @@ class App {
 }
 
 class ListManager {
+    
     constructor(list) {
         this.list = list;
-        this.showMode = enmStatus.ALL;
+        this._showMode = enmStatus.ALL;
+    }
+    get showMode(){
+        return this._showMode;
     }
 
-    setShowMode(showMode) {
-        this.showMode = showMode;
+    set showMode(showMode) {
+        this._showMode = showMode;
         this.shiftShowMode(showMode);
     }
 
@@ -143,7 +147,7 @@ main.addEventListener("click", (event) => {
         return;
     }
 
-    listManager.setShowMode(enmStatus[target.id.toUpperCase()]);
+    listManager.showMode= enmStatus[target.id.toUpperCase()];
 })
 
 button.addEventListener("click", () => {
