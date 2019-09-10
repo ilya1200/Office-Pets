@@ -19,10 +19,8 @@ class App {
     }
 
     loadData() {
-        const calls = 10;
-        for(let i=0;i<calls;i++){
-            this.fetchData()
-        }
+        const results = 10;
+        this.fetchData(results)
     }
 
     redirect() {
@@ -30,28 +28,74 @@ class App {
         main.style.display = "block";
     }
 
-    fetchData(status = enmStatus.OUT) {
-        const dogAPI = "https://dog.ceo/api/breeds/image/random";
-        const namesAPI = "https://randomuser.me/api/?inc=name&nat=us,dk,fr,gb";
-        const corsHeader = {
-            headers:{
-                "Access-Control-Allow-Origin": "*"
+    fetchData(results) {
+        function checkStatus(response) {
+            if (response.ok) {
+                return Promise.resolve(response);
+            } else {
+                return Promise.reject(new Error(response.statusText));
             }
         }
 
-        const newItem = {};
+        function setInitStatus() {
+            const low = 0;
+            const high = 1;
 
-        Promise.all([fetch(dogAPI)
+            const result = randNumber(0, 1);
+            if (result === 1) {
+                return enmStatus.IN;
+            } else {
+                return enmStatus.OUT;
+            }
+        }
+
+        function randNumber(lower, upper) {
+            return Math.floor(Math.random() * (upper - (lower) + 1)) + (lower);
+        }
+
+        const dogAPI = `https://dog.ceo/api/breeds/image/random/${results}`;
+        const namesAPI = `https://randomuser.me/api/?inc=name&nat=us,dk,fr,gb&results=${results}`;
+
+
+
+        function fetchUrls() {
+            return fetch(dogAPI)
+                .then(checkStatus)
                 .then(response => response.json())
-                .then(data => data.message)
-            , fetch(namesAPI)
+                .then(data => (data.message).map(url => { return { url } }))
+                .catch(error => console.log('There was a problem to fetch Items!', error))
+        };
+
+        function fetchNames() {
+            return fetch(namesAPI)
+                .then(checkStatus)
                 .then(response => response.json())
-                .then(data => data.results[0].name.first)]
-        ).then( result => {
-            newItem.url = result[0],
-            newItem.name = result[1]
-            listManager.generateListItem(newItem.name,newItem.url,newItem.name,status)
-        }).catch(error => console.log('Looks like there was a problem!', error))
+                .then(data => (data.results).map(nameObj => { return { name: nameObj.name.first } }))
+                .catch(error => console.log('There was a problem to fetch Names!', error))
+        };
+
+
+        Promise.all([fetchUrls(), fetchNames()])
+            .then(data => {
+                const urls = data[0];
+                const names = data[1];
+
+                const items = [];
+
+                for (let i = 0; i < urls.length; i++) {
+                    const name = names[i].name;
+                    const url = urls[i].url;
+                    const status = setInitStatus();
+
+                    const newItem = {
+                        name,
+                        url,
+                        status
+                    };
+                    items.push(newItem);// TODO : Should be stored?
+                    listManager.generateListItem(newItem.name, newItem.url, newItem.status)
+                }
+            }).catch(error => listManager.issueListError("There was a problem Loading the data..."))
     }
 }
 
@@ -120,14 +164,14 @@ class ListManager {
         errorMsg.innerHTML = "";
     }
 
-    generateListItem(itemName = "unknown", src, alt, itemStatus = enmStatus.OUT) {
+    generateListItem(itemName = "unknown", src = "", itemStatus = enmStatus.OUT) {
         this.resetListError();
         const listItem =
             `                
             <li class="list-item ${itemStatus}">
                 <img class="item-img"
                     src=${src}
-                    alt=${alt}>
+                    alt=${itemName}>
                 <div class="overlay">
                     <span class="item-name">${itemName}</span>
                 </div>
@@ -191,13 +235,13 @@ button.addEventListener("click", () => {
 
     // Set new Item
     newItem.name = name;
-    newItem.imageURL = url;
+    newItem.url = url;
     newItem.status = status;
 
     // Add new Item to DB
 
     //Update UI
-    listManager.generateListItem(name, url, name, status);
+    listManager.generateListItem(newItem.name, newItem.url, newItem.status);
 })
 
 const listManager = new ListManager(list);
