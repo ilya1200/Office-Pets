@@ -13,18 +13,16 @@ class App {
     constructor() { } // set the app
 
     init() {
-        setTimeout(() => { this.loadData() }, 2500);
-        //ToDo 
-
-        //2. Create a dammyDB 
-
-        //3. Issue server get data request
-
-        //4. Generate HTML
+        this.loadData();
+        setTimeout(() => { this.redirect() }, 2500);
     }
 
     loadData() {
-        this.redirect();
+        const calls = 10;
+        for(let i=0;i<calls;i++){
+            console.log("call")
+            this.fetchData()
+        }
     }
 
     redirect() {
@@ -34,17 +32,9 @@ class App {
 
     fetchData(status = enmStatus.OUT) {
         const dogAPI = "https://dog.ceo/api/breeds/image/random";
-        const namesAPI = "https://randomuser.me/api/";
+        const namesAPI = "https://randomuser.me/api/?inc=name&nat=us,dk,fr,gb";
 
         const newItem = {};
-
-        // Promise.all([fetch(dogAPI)
-        //     .then(response => response.json())
-        //     .then(data => newItem.url = data.message), fetch(namesAPI)
-        //         .then(response => response.json())
-        //         .then(data => newItem.name = data.results[0].name.first)]
-        // ).then( result => listManager.generateListItem(newItem.name,newItem.url,undefined,status))
-
 
         Promise.all([fetch(dogAPI)
                 .then(response => response.json())
@@ -55,7 +45,7 @@ class App {
         ).then( result => {
             newItem.url = result[0],
             newItem.name = result[1]
-            listManager.generateListItem(newItem.name,newItem.url,undefined,status)
+            listManager.generateListItem(newItem.name,newItem.url,newItem.name,status)
         })
     }
 }
@@ -209,7 +199,3 @@ button.addEventListener("click", () => {
 const listManager = new ListManager(list);
 const app = new App();
 app.init();
-app.fetchData(enmStatus.IN)
-app.fetchData(enmStatus.IN)
-app.fetchData(enmStatus.OUT)
-app.fetchData(enmStatus.OUT)

@@ -92,6 +92,7 @@ html, body {
     margin-bottom:  1rem;
     min-width: 80px;
     cursor: pointer;
+    opacity: 0.9;
 }
 
 
@@ -141,7 +142,7 @@ html, body {
     bottom: 0;
     position: absolute;
     text-align: center;
-    letter-spacing: 13px;
+    letter-spacing: 0.5rem;
     opacity: 0.6;
     overflow: hidden;
 }
@@ -153,7 +154,7 @@ html, body {
 .list-item .item-name{
     color: white;
     margin: 0;
-    font-size: 20px;
+    font-size: 1rem;
     display: inline-block;
     max-width: 100%;
 }
@@ -190,6 +191,8 @@ html, body {
 
 @media only screen and (min-width:820px){
     .list-item{
+        width: 160px;
+        height: 120px;
         margin-left: 3rem;
         margin-right: 3rem;
     }
