@@ -8,7 +8,7 @@ html, body {
 .main{
     text-align: center;
     height: 100vh;
-    padding:  3% 10px 0;
+    padding:  3% 0.6rem 6rem;
     margin-top: 5rem;
     overflow: auto;
     text-transform: capitalize;
@@ -119,8 +119,8 @@ html, body {
 
 .list-item{
     border-radius: 4px;
-    width: 270px;
-    height: 190px;
+    width: 320px;
+    height: 180px;
     position: relative;
     margin: 18px;
     box-shadow: 0 0 7px rgba(0,0,0,0.4);
@@ -143,6 +143,7 @@ html, body {
     text-align: center;
     letter-spacing: 13px;
     opacity: 0.6;
+    overflow: hidden;
 }
 
 .in{
@@ -153,6 +154,8 @@ html, body {
     color: white;
     margin: 0;
     font-size: 20px;
+    display: inline-block;
+    max-width: 100%;
 }
 
 .out{
@@ -180,8 +183,6 @@ html, body {
         justify-content: flex-start;
     }
     .list-item{
-        width: 220px;
-        height: 180px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -196,8 +197,6 @@ html, body {
 
 @media only screen and (min-width:930px){
     .list-item{
-        width: 200px;
-        height: 150px;
         margin-left: 2.1rem;
         margin-right: 2.1rem
     }

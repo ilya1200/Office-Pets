@@ -31,15 +31,42 @@ class App {
         welcome.style.display = "none";
         main.style.display = "block";
     }
+
+    fetchData(status = enmStatus.OUT) {
+        const dogAPI = "https://dog.ceo/api/breeds/image/random";
+        const namesAPI = "https://randomuser.me/api/";
+
+        const newItem = {};
+
+        // Promise.all([fetch(dogAPI)
+        //     .then(response => response.json())
+        //     .then(data => newItem.url = data.message), fetch(namesAPI)
+        //         .then(response => response.json())
+        //         .then(data => newItem.name = data.results[0].name.first)]
+        // ).then( result => listManager.generateListItem(newItem.name,newItem.url,undefined,status))
+
+
+        Promise.all([fetch(dogAPI)
+                .then(response => response.json())
+                .then(data => data.message)
+            , fetch(namesAPI)
+                .then(response => response.json())
+                .then(data => data.results[0].name.first)]
+        ).then( result => {
+            newItem.url = result[0],
+            newItem.name = result[1]
+            listManager.generateListItem(newItem.name,newItem.url,undefined,status)
+        })
+    }
 }
 
 class ListManager {
-    
+
     constructor(list) {
         this.list = list;
         this._showMode = enmStatus.ALL;
     }
-    get showMode(){
+    get showMode() {
         return this._showMode;
     }
 
@@ -147,7 +174,7 @@ main.addEventListener("click", (event) => {
         return;
     }
 
-    listManager.showMode= enmStatus[target.id.toUpperCase()];
+    listManager.showMode = enmStatus[target.id.toUpperCase()];
 })
 
 button.addEventListener("click", () => {
@@ -182,3 +209,7 @@ button.addEventListener("click", () => {
 const listManager = new ListManager(list);
 const app = new App();
 app.init();
+app.fetchData(enmStatus.IN)
+app.fetchData(enmStatus.IN)
+app.fetchData(enmStatus.OUT)
+app.fetchData(enmStatus.OUT)
