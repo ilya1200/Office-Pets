@@ -1,7 +1,8 @@
+const welcome = document.getElementById("welcome");
 const main = document.getElementById("main");
 const list = document.getElementById("list");
-const welcome = document.getElementById("welcome");
 const button = document.getElementById("add-item");
+const errorMsg = document.getElementById("list-error-msg");
 
 const enmStatus = {
     ALL: 'all',
@@ -20,7 +21,6 @@ class App {
     loadData() {
         const calls = 10;
         for(let i=0;i<calls;i++){
-            console.log("call")
             this.fetchData()
         }
     }
@@ -33,6 +33,11 @@ class App {
     fetchData(status = enmStatus.OUT) {
         const dogAPI = "https://dog.ceo/api/breeds/image/random";
         const namesAPI = "https://randomuser.me/api/?inc=name&nat=us,dk,fr,gb";
+        const corsHeader = {
+            headers:{
+                "Access-Control-Allow-Origin": "*"
+            }
+        }
 
         const newItem = {};
 
@@ -46,7 +51,7 @@ class App {
             newItem.url = result[0],
             newItem.name = result[1]
             listManager.generateListItem(newItem.name,newItem.url,newItem.name,status)
-        })
+        }).catch(error => console.log('Looks like there was a problem!', error))
     }
 }
 
@@ -103,7 +108,6 @@ class ListManager {
     }
 
     issueListError(msg) {
-        const errorMsg = document.getElementById("list-error-msg");
         this.resetListError();
 
         // Display error message
@@ -112,12 +116,12 @@ class ListManager {
     }
 
     resetListError() {
-        const errorMsg = document.getElementById("list-error-msg");
         // Hide error message
         errorMsg.innerHTML = "";
     }
 
     generateListItem(itemName = "unknown", src, alt, itemStatus = enmStatus.OUT) {
+        this.resetListError();
         const listItem =
             `                
             <li class="list-item ${itemStatus}">

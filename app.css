@@ -8,7 +8,7 @@ html, body {
 .main{
     text-align: center;
     height: 100vh;
-    padding:  3% 0.6rem 6rem;
+    padding-bottom: 6rem;
     margin-top: 5rem;
     overflow: auto;
     text-transform: capitalize;
@@ -32,7 +32,7 @@ html, body {
     justify-content: space-evenly;
     align-items: center;
     list-style: none;
-    padding: 0;
+    padding: 2rem 0;
 }
 
 .add-item{
@@ -85,8 +85,7 @@ html, body {
     display: inline-block;
     text-decoration: none;
     text-align: center;
-    padding-left: 12px;
-    padding-right: 12px;
+
     color: antiquewhite;
     margin-top:  1rem;
     margin-bottom:  1rem;
@@ -120,8 +119,8 @@ html, body {
 
 .list-item{
     border-radius: 4px;
-    width: 320px;
-    height: 180px;
+    width: 208px;
+    height: 117px;
     position: relative;
     margin: 18px;
     box-shadow: 0 0 7px rgba(0,0,0,0.4);
@@ -172,6 +171,8 @@ html, body {
         width: 5rem;
         margin-top: 1.5rem;
         margin-bottom: 1.5rem;
+        padding-left: 12px;
+        padding-right: 12px;
     }
 }
 
