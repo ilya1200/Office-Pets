@@ -33,6 +33,10 @@ html, body {
     align-items: center;
     list-style: none;
     padding: 2rem 0;
+    background-color: white;
+    border-radius: 45px;
+    box-shadow: 0 0 7px rgba(0,0,0,0.4);
+    margin-top: 3rem;
 }
 
 .add-item{
@@ -109,8 +113,12 @@ html, body {
     error-msg
 */
 .list-error-msg{
-    margin-top: 7rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
     color: red;
+    width: 100%;
+    text-align: center;
 }
 
 /*

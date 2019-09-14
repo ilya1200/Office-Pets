@@ -4,8 +4,13 @@ const list = document.getElementById("list");
 const button = document.getElementById("add-item");
 const errorMsg = document.getElementById("list-error-msg");
 
-const enmStatus = {
+const enmShowMode = {
     ALL: 'all',
+    IN: 'in',
+    OUT: 'out'
+}
+
+const enmStatus={
     IN: 'in',
     OUT: 'out'
 }
@@ -41,7 +46,7 @@ class App {
             const low = 0;
             const high = 1;
 
-            const result = randNumber(0, 1);
+            const result = randNumber(low, high);
             if (result === 1) {
                 return enmStatus.IN;
             } else {
@@ -103,7 +108,7 @@ class ListManager {
 
     constructor(list) {
         this.list = list;
-        this._showMode = enmStatus.ALL;
+        this._showMode = enmShowMode.ALL;
     }
     get showMode() {
         return this._showMode;
@@ -133,7 +138,7 @@ class ListManager {
         let itemsRemainedInShowMode = list.children.length;
 
         for (let listItem of list.children) {
-            if (showMode === enmStatus.ALL) {
+            if (showMode === enmShowMode.ALL) {
                 listItem.style.display = "block";
             } else {
                 const display = listItem.classList.contains(showMode) ? "block" : "none";
@@ -156,7 +161,7 @@ class ListManager {
 
         // Display error message
         errorMsg.style.display = "block";
-        errorMsg.innerHTML = `<h1>* ${msg} *</h1>`;
+        errorMsg.innerHTML = `<h4>* ${msg} *</h4>`;
     }
 
     resetListError() {
@@ -212,7 +217,7 @@ main.addEventListener("click", (event) => {
         return;
     }
 
-    listManager.showMode = enmStatus[target.id.toUpperCase()];
+    listManager.showMode = enmShowMode[target.id.toUpperCase()];
 })
 
 button.addEventListener("click", () => {
